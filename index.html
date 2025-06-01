@@ -3,40 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File System Access API Example</title>
+    <title>Upload Folder to Dropbox</title>
     <style>
         body {
-            background-color: #f2e2f2; /* Light gray background */
             font-family: Arial, sans-serif;
             text-align: center;
         }
         
-        #container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        
-        #media-player {
-            margin-top: 20px;
-        }
-        
-        #media-player img {
-            width: 100%;
-            height: auto;
-            max-width: 400px;
+        #upload-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div id="container">
-        <button id="create-folder-btn">Download</button>
-        <div id="media-player">
-            <img src="https://images.pexels.com/photos/1375849/pexels-photo-1375849.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"                                                                                                                            
-        </div>
-    </div>
-    <script src="script.js"></script>
+    <button id="upload-button">Upload Folder to Dropbox</button>
+    
+    <script>
+        // JavaScript code here
+        async function uploadFolderToDropbox() {
+            try {
+                const directoryHandle = await window.showDirectoryPicker();
+                for await (const entry of directoryHandle.values()) {
+                    if (entry.kind === 'file') {
+                        const file = await entry.getFile();
+                        // Upload file to Dropbox
+                        const dropboxApiUrl = 'https:                                         
+                        const headers = {
+                            'Authorization': 'Bearer sl.u.AFyJHOvGuELUAtwArJ4BR03dM9pgOKfEi0W1s5Vr5glRJith3Y6CBvGwMjMYPeKq42xZfQl3MTQwAB7HEaKxbyQkOMtHrus3gp0z14nSfiIMK2vqmCd_G1lXrl5',
+                            'Content-Type': 'application/octet-stream',
+                            'Dropbox-API-Arg': JSON.stringify({
+                                path: '/' + file.name,
+                                mode: 'add',
+                                autorename: true,
+                                mute: false
+                            })
+                        };
+                        const response = await fetch(dropboxApiUrl, {
+                            method: 'POST',
+                            headers: headers,
+                            body: file
+                        });
+                        if (response.ok) {
+                            console.log('File uploaded to Dropbox:', file.name);
+                        } else {
+                            console.error('Error uploading file to Dropbox:', response.statusText);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error uploading folder to Dropbox:', error);
+            }
+        }
+        
+        document.getElementById('upload-button').addEventListener('click', uploadFolderToDropbox);
+    </script>
 </body>
-        </html>
-            
+</html>

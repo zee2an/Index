@@ -3,67 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Folder to Dropbox</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        
-        #upload-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
+    <title>Set Storage Path</title>
 </head>
 <body>
-    <button id="upload-button">Upload Folder to Dropbox</button>
-    
+    <button id="set-storage-path">Set Storage Path</button>
     <script>
+        // Get the button element
+        const setStoragePathButton = document.getElementById('set-storage-path');
 
-document.getElementById('upload-button').addEventListener('click', async () => {
-  try {
-    const directoryHandle = await window.showDirectoryPicker();
-    console.log('Directory picker opened:', directoryHandle);
-    await uploadFolderToDropbox(directoryHandle);
-  } catch (error) {
-    console.error('Error opening directory picker:', error);
-  }
-});
+        // Add event listener to the button
+        setStoragePathButton.addEventListener('click', async () => {
+            try {
+                // Request access to a directory
+                const directoryHandle = await window.showDirectoryPicker();
+                console.log('Directory access granted:', directoryHandle);
 
-async function uploadFolderToDropbox(directoryHandle) {
-  try {
-    for await (const entry of directoryHandle.values()) {
-      if (entry.kind === 'file') {
-        const file = await entry.getFile();
-        // Upload file to Dropbox
-        const dropboxApiUrl = 'https:                                         
-        const headers = {
-          '//content.dropboxapi.com/2/files/upload';
-        const headers = {
-          'Authorization': 'Bearer sl.u.AFz-pyvIDzio6a-cZ7Q7nYGw5W_6g8KNpHID_LDWeok1ZjuFVKJFhGe2ticfqfgIID44ABcIcodwBIb1t42qr7bFN3TlLtPhHuNJ_ev3Wv5AR9NORPQpYLA0IrM1MrFczjB8jzIS8OdeGA06CGpTsO6hVOEm2ECACIzhrnYol0TjkzjSpPob9I2o2AJlCzPtljl87UqALHYov0dqouFt_GOXSLNqi7aQeM09bHNxydLZ3d9uEyv50IgTqqffBEAv6',
-          'Content-Type': 'application/octet-stream',
-          'Dropbox-API-Arg': JSON.stringify({
-            path: '/' + file.name,
-            mode: 'add',
-            autorename: true,
-            mute: false
-          })
-        };
-        const response = await fetch(dropboxApiUrl, {
-          method: 'POST',
-          headers: headers,
-          body: file
+                // Get the folder path
+                let folderPath = '';
+                for await (const [name, handle] of directoryHandle) {
+                    folderPath = directoryHandle.name + '/' + name;
+                    break; // Get the path of the first file or folder
+                }
+
+                // Set the storage path
+                localStorage.setItem('storagePath', folderPath);
+                console.log('Storage path set:', folderPath);
+            } catch (error) {
+                console.error('Error setting storage path:', error);
+            }
         });
-        if (response.ok) {
-          console.log('File uploaded to Dropbox:', file.name);
-        } else {
-          console.error('Error uploading file to Dropbox:', response.statusText);
-        }
-      }
-    }
-  } catch (error) {
-    console.error('Error uploading folder to Dropbox:', error);
-  }
-}
+    </script>
+</body>
+</html>

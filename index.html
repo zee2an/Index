@@ -1,3 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Folder to Dropbox</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        
+        #upload-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="upload-button">Upload Folder to Dropbox</button>
+    
+    <script>
+
 document.getElementById('upload-button').addEventListener('click', async () => {
   try {
     const directoryHandle = await window.showDirectoryPicker();

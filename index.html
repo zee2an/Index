@@ -1,25 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Folder to Dropbox</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        
-        #upload-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <button id="upload-button">Upload Folder to Dropbox</button>
-    document.getElementById('upload-button').addEventListener('click', async () => {
+document.getElementById('upload-button').addEventListener('click', async () => {
   try {
     const directoryHandle = await window.showDirectoryPicker();
     console.log('Directory picker opened:', directoryHandle);
@@ -28,44 +7,39 @@
     console.error('Error opening directory picker:', error);
   }
 });
-    <script>
-        // JavaScript code here
-        async function uploadFolderToDropbox() {
-            try {
-                const directoryHandle = await window.showDirectoryPicker();
-                for await (const entry of directoryHandle.values()) {
-                    if (entry.kind === 'file') {
-                        const file = await entry.getFile();
-                        // Upload file to Dropbox
-                        const dropboxApiUrl = 'https:                                         
-                        const headers = {
-                            'Authorization': 'Bearer sl.u.AFyJHOvGuELUAtwArJ4BR03dM9pgOKfEi0W1s5Vr5glRJith3Y6CBvGwMjMYPeKq42xZfQl3MTQwAB7HEaKxbyQkOMtHrus3gp0z14nSfiIMK2vqmCd_G1lXrl5',
-                            'Content-Type': 'application/octet-stream',
-                            'Dropbox-API-Arg': JSON.stringify({
-                                path: '/' + file.name,
-                                mode: 'add',
-                                autorename: true,
-                                mute: false
-                            })
-                        };
-                        const response = await fetch(dropboxApiUrl, {
-                            method: 'POST',
-                            headers: headers,
-                            body: file
-                        });
-                        if (response.ok) {
-                            console.log('File uploaded to Dropbox:', file.name);
-                        } else {
-                            console.error('Error uploading file to Dropbox:', response.statusText);
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Error uploading folder to Dropbox:', error);
-            }
+
+async function uploadFolderToDropbox(directoryHandle) {
+  try {
+    for await (const entry of directoryHandle.values()) {
+      if (entry.kind === 'file') {
+        const file = await entry.getFile();
+        // Upload file to Dropbox
+        const dropboxApiUrl = 'https:                                         
+        const headers = {
+          '//content.dropboxapi.com/2/files/upload';
+        const headers = {
+          'Authorization': 'Bearer sl.u.AFz-pyvIDzio6a-cZ7Q7nYGw5W_6g8KNpHID_LDWeok1ZjuFVKJFhGe2ticfqfgIID44ABcIcodwBIb1t42qr7bFN3TlLtPhHuNJ_ev3Wv5AR9NORPQpYLA0IrM1MrFczjB8jzIS8OdeGA06CGpTsO6hVOEm2ECACIzhrnYol0TjkzjSpPob9I2o2AJlCzPtljl87UqALHYov0dqouFt_GOXSLNqi7aQeM09bHNxydLZ3d9uEyv50IgTqqffBEAv6',
+          'Content-Type': 'application/octet-stream',
+          'Dropbox-API-Arg': JSON.stringify({
+            path: '/' + file.name,
+            mode: 'add',
+            autorename: true,
+            mute: false
+          })
+        };
+        const response = await fetch(dropboxApiUrl, {
+          method: 'POST',
+          headers: headers,
+          body: file
+        });
+        if (response.ok) {
+          console.log('File uploaded to Dropbox:', file.name);
+        } else {
+          console.error('Error uploading file to Dropbox:', response.statusText);
         }
-        
-        document.getElementById('upload-button').addEventListener('click', uploadFolderToDropbox);
-    </script>
-</body>
-</html>
+      }
+    }
+  } catch (error) {
+    console.error('Error uploading folder to Dropbox:', error);
+  }
+}

@@ -19,7 +19,15 @@
 </head>
 <body>
     <button id="upload-button">Upload Folder to Dropbox</button>
-    
+    document.getElementById('upload-button').addEventListener('click', async () => {
+  try {
+    const directoryHandle = await window.showDirectoryPicker();
+    console.log('Directory picker opened:', directoryHandle);
+    await uploadFolderToDropbox(directoryHandle);
+  } catch (error) {
+    console.error('Error opening directory picker:', error);
+  }
+});
     <script>
         // JavaScript code here
         async function uploadFolderToDropbox() {

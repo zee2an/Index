@@ -4,9 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File System Access API Example</title>
+    <style>
+        body {
+            background-color: #f2f2f2; /* Light gray background */
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        
+        #container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        #media-player {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <button id="create-folder-btn">Download</button>
+    <div id="container">
+        <button id="create-folder-btn">Download</button>
+        <div id="media-player">
+            <!-- Add your media player or image here -->
+            <img src="your-image-url.jpg" alt="Your Image" width="400" height="300">
+            <!-- Or use a video tag for a media player -->
+            <!-- <video width="400" height="300" controls>
+                <source src="your-video-url.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video> -->
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>

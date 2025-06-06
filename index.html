@@ -69,6 +69,48 @@
                 alert('Incorrect password');
             }
         }
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File System Access API Example</title>
+    <style>
+        body {
+            background-color: #f2e2f2; /* Light gray background */
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        
+        #container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        #media-player {
+            margin-top: 20px;
+        }
+        
+        #media-player img {
+            width: 100%;
+            height: auto;
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <button id="create-folder-btn">Download</button>
+        <div id="media-player">
+            <img src="https://images.pexels.com/photos/1375849/pexels-photo-1375849.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"                                                                                                                            
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+        </html>
+            
 
         // Add event listener to the submit button
         document.getElementById('submit-password').addEventListener('click', checkPassword);

@@ -1,5 +1,30 @@
-const fileReader = new FileReader();
-fileReader.onload = () => {
-    console.log('File contents:', fileReader.result);
-};
-fileReader.readAsText(file);
+const express = require('express');
+const app = express();
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
+// File upload endpoint
+app.post('/files', upload.single('file'), (req, res) => {
+    // Handle file upload
+    res.send(`File uploaded successfully: ${req.file.originalname}`);
+});
+
+// File download endpoint
+app.get('/files/:filename', (req, res) => {
+    // Handle file download
+    const filename = req.params.filename;
+    res.download(`uploads/${filename}`);
+});
+
+// File deletion endpoint
+app.delete('/files/:filename', (req, res) => {
+    // Handle file deletion
+    const filename = req.params.filename;
+    fs.unlink(`uploads/${filename}`, (err) => {
+        if (err) {
+            res.status(500).send(`Error deleting file: ${err}`);
+        } else {
+            res.send(`File deleted successfully: ${filename}`);
+        }
+    });
+});

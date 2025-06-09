@@ -67,7 +67,12 @@
                     const img = document.createElement('img');
                     img.src = image;
                     img.classList.add('image');
-                    imageContainer.appendChild(img);
+                    img.onload = () => {
+                        imageContainer.appendChild(img);
+                    };
+                    img.onerror = () => {
+                        console.error('Error loading image:', image);
+                    };
                 });
             })
             .catch((error) => console.error(error));

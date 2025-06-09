@@ -38,18 +38,33 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        #loading-bar {
+            width: 0%;
+            height: 20px;
+            background-color: #4CAF50;
+            transition: width 0.5s;
+        }
+        #loading-status {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <h1>Web Image Scraper</h1>
     <input type="url" id="url-input" placeholder="Enter website URL">
     <button id="scrape-button">Scrape Images</button>
+    <div id="loading-status">
+        <div id="loading-bar"></div>
+        <p id="loading-text">Loading images... 0%</p>
+    </div>
     <div id="image-container"></div>
 
     <script>
         const urlInput = document.getElementById('url-input');
         const scrapeButton = document.getElementById('scrape-button');
         const imageContainer = document.getElementById('image-container');
+        const loadingBar = document.getElementById('loading-bar');
+        const loadingText = document.getElementById('loading-text');
 
         scrapeButton.addEventListener('click', () => {
             const url = urlInput.value;
@@ -62,12 +77,22 @@
             })
             .then((response) => response.json())
             .then((images) => {
+                let loadedImages = 0;
                 imageContainer.innerHTML = '';
+                loadingBar.style.width = '0%';
+                loadingText.textContent = 'Loading images... 0%';
                 images.forEach((image) => {
                     const img = document.createElement('img');
                     img.src = image;
                     img.classList.add('image');
                     img.onload = () => {
+                        loadedImages++;
+                        const percentage = (loadedImages / images.length) * 100;
+                        loadingBar.style.width = `${percentage}%`;
+                        loadingText.textContent = `Loading images... ${Math.floor(percentage)}%`;
+                        if (percentage === 100) {
+                            loadingText.textContent = 'Images loaded!';
+                        }
                         imageContainer.appendChild(img);
                     };
                     img.onerror = () => {

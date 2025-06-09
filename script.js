@@ -20,6 +20,3 @@ app.post('/scrape', (req, res) => {
     })
     .catch((error) => console.error(error));
 });
-img.onerror = () => {
-    console.error('Error loading image:', img.src);
-};

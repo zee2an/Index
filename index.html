@@ -4,20 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Image Scraper</title>
-    <style>
-        #image-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-        }
-        .image {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Web Image Scraper</h1>
@@ -25,45 +12,6 @@
     <button id="scrape-button">Scrape Images</button>
     <div id="image-container"></div>
 
-    <script>
-        const urlInput = document.getElementById('url-input');
-        const scrapeButton = document.getElementById('scrape-button');
-        const imageContainer = document.getElementById('image-container');
-
-        scrapeButton.addEventListener('click', () => {
-            const url = urlInput.value;
-            console.log(`Scraping images from ${url}...`);
-            fetch('/scrape', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ url }),
-            })
-            .then((response) => {
-                console.log(`Received response from server...`);
-                return response.json();
-            })
-            .then((images) => {
-                console.log(`Received ${images.length} images...`);
-                imageContainer.innerHTML = '';
-                images.forEach((image) => {
-                    const img = document.createElement('img');
-                    img.src = image;
-                    img.classList.add('image');
-                    img.onload = () => {
-                        console.log(`Loaded image ${image}...`);
-                    };
-                    img.onerror = () => {
-                        console.error(`Error loading image ${image}...`);
-                    };
-                    imageContainer.appendChild(img);
-                });
-            })
-            .catch((error) => {
-                console.error(`Error scraping images: ${error}`);
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

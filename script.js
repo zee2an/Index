@@ -19,6 +19,12 @@ scrapeButton.addEventListener('click', () => {
             const img = document.createElement('img');
             img.src = image;
             img.classList.add('image');
+            img.onload = () => {
+                console.log(`Loaded image ${image}`);
+            };
+            img.onerror = () => {
+                console.error(`Error loading image ${image}`);
+            };
             imageContainer.appendChild(img);
         });
     })

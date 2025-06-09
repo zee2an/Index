@@ -1,30 +1,77 @@
-const express = require('express');
-const app = express();
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
-
-// File upload endpoint
-app.post('/files', upload.single('file'), (req, res) => {
-    // Handle file upload
-    res.send(`File uploaded successfully: ${req.file.originalname}`);
-});
-
-// File download endpoint
-app.get('/files/:filename', (req, res) => {
-    // Handle file download
-    const filename = req.params.filename;
-    res.download(`uploads/${filename}`);
-});
-
-// File deletion endpoint
-app.delete('/files/:filename', (req, res) => {
-    // Handle file deletion
-    const filename = req.params.filename;
-    fs.unlink(`uploads/${filename}`, (err) => {
-        if (err) {
-            res.status(500).send(`Error deleting file: ${err}`);
-        } else {
-            res.send(`File deleted successfully: ${filename}`);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Image Scraper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
         }
-    });
-});
+        #url-input {
+            width: 50%;
+            height: 30px;
+            font-size: 18px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        #scrape-button {
+            width: 150px;
+            height: 40px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #image-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .image {
+            margin: 10px;
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Web Image Scraper</h1>
+    <input type="url" id="url-input" placeholder="Enter website URL">
+    <button id="scrape-button">Scrape Images</button>
+    <div id="image-container"></div>
+
+    <script>
+        const urlInput = document.getElementById('url-input');
+        const scrapeButton = document.getElementById('scrape-button');
+        const imageContainer = document.getElementById('image-container');
+
+        scrapeButton.addEventListener('click', () => {
+            const url = urlInput.value;
+            fetch('/scrape', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url }),
+            })
+            .then((response) => response.json())
+            .then((images) => {
+                imageContainer.innerHTML = '';
+                images.forEach((image) => {
+                    const img = document.createElement('img');
+                    img.src = image;
+                    img.classList.add('image');
+                    imageContainer.appendChild(img);
+                });
+            })
+            .catch((error) => console.error(error));
+        });
+    </script>
+</body>
+</html>

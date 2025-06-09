@@ -4,7 +4,7 @@ const cheerio = require('cheerio');
 
 const app = express();
 
-app.use(express.json()); // parse JSON bodies
+app.use(express.json());
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -19,7 +19,7 @@ app.post('/scrape', (req, res) => {
         const images = [];
         $('img').each((index, element) => {
             const src = $(element).attr('src');
-            if (src) {
+            if (src && src.startsWith('http')) {
                 images.push(src);
             }
         });
@@ -28,6 +28,7 @@ app.post('/scrape', (req, res) => {
     .catch((error) => console.error(error));
 });
 
-app.listen(3000, () => {
-    console.log('Server listening on port 3000');
+const port = 3000;
+app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
 });

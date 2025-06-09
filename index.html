@@ -5,26 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Image Scraper</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        #url-input {
-            width: 50%;
-            height: 30px;
-            font-size: 18px;
-            padding: 10px;
-            margin-bottom: 20px;
-        }
-        #scrape-button {
-            width: 150px;
-            height: 40px;
-            font-size: 18px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
         #image-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -52,6 +32,7 @@
 
         scrapeButton.addEventListener('click', () => {
             const url = urlInput.value;
+            console.log(`Scraping images from ${url}...`);
             fetch('/scrape', {
                 method: 'POST',
                 headers: {
@@ -59,17 +40,29 @@
                 },
                 body: JSON.stringify({ url }),
             })
-            .then((response) => response.json())
+            .then((response) => {
+                console.log(`Received response from server...`);
+                return response.json();
+            })
             .then((images) => {
+                console.log(`Received ${images.length} images...`);
                 imageContainer.innerHTML = '';
                 images.forEach((image) => {
                     const img = document.createElement('img');
                     img.src = image;
                     img.classList.add('image');
+                    img.onload = () => {
+                        console.log(`Loaded image ${image}...`);
+                    };
+                    img.onerror = () => {
+                        console.error(`Error loading image ${image}...`);
+                    };
                     imageContainer.appendChild(img);
                 });
             })
-            .catch((error) => console.error(error));
+            .catch((error) => {
+                console.error(`Error scraping images: ${error}`);
+            });
         });
     </script>
 </body>
